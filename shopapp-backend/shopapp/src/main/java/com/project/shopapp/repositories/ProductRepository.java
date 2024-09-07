@@ -15,11 +15,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findProductsByName(@Param("productName") String name);
     Page<Product> findAll(Pageable pageable);//phân trang
 
-    // Truy vấn lấy các sản phẩm theo category_id
+
     @Query("SELECT p FROM Product p WHERE p.category.id = :categoryId")
     List<Product> findProductsByCategoryId(@Param("categoryId") long categoryId);
 
-    // Truy vấn lấy một sản phẩm cho mỗi danh mục
+
     @Query("SELECT p FROM Product p WHERE p.id IN (SELECT MIN(p1.id) FROM Product p1 GROUP BY p1.category.id)")
     List<Product> findDistinctImageByCategory();
 }

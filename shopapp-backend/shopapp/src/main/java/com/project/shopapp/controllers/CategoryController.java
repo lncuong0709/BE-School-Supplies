@@ -35,7 +35,7 @@ public class CategoryController {
     private final LocalizationUtils localizationUtils;
 
     @PostMapping("")
-    //Nếu tham số truyền vào là 1 object thì sao ? => Data Transfer Object = Request Object
+
     public ResponseEntity<CategoryResponse> createCategory(
             @Valid @RequestBody CategoryDTO categoryDTO,
             BindingResult result) {
@@ -54,7 +54,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryResponse);
     }
 
-    //Hiện tất cả các categories
+
     @GetMapping("")
     public ResponseEntity<?> getAllCategories() {
         try {
@@ -62,7 +62,7 @@ public class CategoryController {
             List<CategoryResponse> categoryResponses = CategoryResponse.fromCategorys(existingCategories);
             return ResponseEntity.ok(categoryResponses);
         } catch (Exception e) {
-            // Logging the exception might also be a good idea
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while fetching category: " + e.getMessage());
         }

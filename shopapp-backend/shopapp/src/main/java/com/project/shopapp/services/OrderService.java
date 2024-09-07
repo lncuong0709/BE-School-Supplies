@@ -35,13 +35,9 @@ public class OrderService implements IOrderService{
                 .email(orderDTO.getEmail())
                 .phoneNumber(orderDTO.getPhoneNumber())
                 .address(orderDTO.getAddress())
-//                .note(orderDTO.getNote())
-//                .orderDate(new Date(System.currentTimeMillis()))
+
                 .totalMoney(orderDTO.getTotalMoney())
-//                .shippingMethod(orderDTO.getShippingMethod())
-//                .shippingAddress(orderDTO.getShippingAddress())
-//                .shippingDate(orderDTO.getShippingDate())
-//                .paymentMethod(orderDTO.getPaymentMethod())
+
                 .build();
 
 
@@ -59,10 +55,10 @@ public class OrderService implements IOrderService{
         Order order = orderRepository.findById(id).orElseThrow(() ->
                 new DataNotFoundException("Cannot find order with id: " + id));
 
-        // Tạo một luồng bảng ánh xạ riêng để kiểm soát việc ánh xạ
+
         modelMapper.typeMap(OrderDTO.class, Order.class)
                 .addMappings(mapper -> mapper.skip(Order::setId));
-        // Cập nhật các trường của đơn hàng từ orderDTO
+
         modelMapper.map(orderDTO, order);
         return orderRepository.save(order);
     }

@@ -82,23 +82,23 @@ public class ProductController {
                         .body("File must be an image");
             }
 
-            // Lưu file và lấy tên tệp
+
             String filename = storeFile(thumbnail);
 
-            // Lấy Category từ cơ sở dữ liệu
+
           Category existingCategory = categoryRepository.findById(productDTO.getCategoryId())
                     .orElseThrow(() -> new RuntimeException("Category not found"));
 
-            // Tạo đối tượng Product
+
             Product newProduct = Product.builder()
                     .name(productDTO.getName())
                     .price(productDTO.getPrice())
-                    .thumbnail(filename) // Lưu tên tệp thumbnail vào đối tượng Product
+                    .thumbnail(filename)
                     .description(productDTO.getDescription())
-                    .category(existingCategory) // Đảm bảo existingCategory được xác định đúng
+                    .category(existingCategory)
                     .build();
 
-            // Lưu Product vào cơ sở dữ liệu
+
             newProduct = productRepository.save(newProduct);
             return ResponseEntity.ok(newProduct);
         } catch (Exception e) {
@@ -119,7 +119,7 @@ public class ProductController {
                 return ResponseEntity.ok()
                         .contentType(MediaType.IMAGE_JPEG)
                         .body(new UrlResource(Paths.get("uploads/notfound.jpeg").toUri()));
-                //return ResponseEntity.notFound().build();
+
             }
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
@@ -127,17 +127,17 @@ public class ProductController {
     }
     private String storeFile(MultipartFile file) throws IOException {
         String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-        // Thêm UUID vào trước tên file để đảm bảo tên file là duy nhất
+
         String uniqueFilename = UUID.randomUUID().toString() + "_" + filename;
-        // Đường dẫn đến thư mục mà bạn muốn lưu file
+
         java.nio.file.Path uploadDir = Paths.get("uploads");
-        // Kiểm tra và tạo thư mục nếu nó không tồn tại
+
         if (!Files.exists(uploadDir)) {
             Files.createDirectories(uploadDir);
         }
-        // Đường dẫn đầy đủ đến file
+
         java.nio.file.Path destination = Paths.get(uploadDir.toString(), uniqueFilename);
-        // Sao chép file vào thư mục đích
+
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
         return uniqueFilename;
     }
@@ -152,7 +152,7 @@ public class ProductController {
             List<ProductResponse> productResponses = ProductResponse.fromProducts(existingProducts);
             return ResponseEntity.ok(productResponses);
         } catch (Exception e) {
-            // Logging the exception might also be a good idea
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while fetching products: " + e.getMessage());
         }
@@ -164,12 +164,12 @@ public class ProductController {
             List<ProductResponse> productResponses = ProductResponse.fromProducts(existingProducts);
             return ResponseEntity.ok(productResponses);
         } catch (Exception e) {
-            // Logging the exception might also be a good idea
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while fetching products: " + e.getMessage());
         }
     }
-    //http://localhost:8088/api/v1/products/6
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(
             @PathVariable("id") Long productId
@@ -198,7 +198,7 @@ public class ProductController {
             List<ProductResponse> productResponses = ProductResponse.fromProducts(existingProducts);
             return ResponseEntity.ok(productResponses);
         } catch (Exception e) {
-            // Logging the exception might also be a good idea
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while fetching products: " + e.getMessage());
         }
@@ -228,7 +228,7 @@ public class ProductController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    //@PostMapping("/generateFakeProducts")
+
 
     //update a product
     @PutMapping("/{id}")

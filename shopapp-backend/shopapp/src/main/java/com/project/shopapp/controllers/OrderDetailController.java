@@ -24,7 +24,7 @@ import java.util.List;
 public class OrderDetailController {
     private final OrderDetailService orderDetailService;
     private final LocalizationUtils localizationUtils;
-    //Thêm mới 1 order detail
+
     @PostMapping("")
     public ResponseEntity<?> createOrderDetail(
             @Valid  @RequestBody OrderDetailDTO orderDetailDTO) {
@@ -43,7 +43,7 @@ public class OrderDetailController {
             List<OrderDetailResponse> orderDetailResponses = OrderDetailResponse.fromOrderDetails(existingOrderDetails);
             return ResponseEntity.ok(orderDetailResponses);
         } catch (Exception e) {
-            // Logging the exception might also be a good idea
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while fetching order details: " + e.getMessage());
         }
@@ -55,7 +55,7 @@ public class OrderDetailController {
         OrderDetail orderDetail = orderDetailService.getOrderDetail(id);
         return ResponseEntity.ok().body(OrderDetailResponse.fromOrderDetail(orderDetail));
     }
-    //lấy ra danh sách các order_details của 1 order nào đó
+
     @GetMapping("/order/{orderId}")
     public ResponseEntity<?> getOrderDetails(
             @Valid @PathVariable("orderId") Long orderId

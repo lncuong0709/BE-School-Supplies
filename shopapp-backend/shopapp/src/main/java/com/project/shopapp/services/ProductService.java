@@ -36,7 +36,6 @@ public class ProductService implements IProductService{
         Product newProduct = Product.builder()
                 .name(productDTO.getName())
                 .price(productDTO.getPrice())
-//                .thumbnail(productDTO.getThumbnail())
                 .description(productDTO.getDescription())
                 .category(existingCategory)
                 .build();
@@ -78,8 +77,7 @@ public class ProductService implements IProductService{
             throws Exception {
         Product existingProduct = getProductById(id);
         if(existingProduct != null) {
-            //copy các thuộc tính từ DTO -> Product
-            //Có thể sử dụng ModelMapper
+
             Category existingCategory = categoryRepository
                     .findById(productDTO.getCategoryId())
                     .orElseThrow(() ->
@@ -89,7 +87,7 @@ public class ProductService implements IProductService{
             existingProduct.setCategory(existingCategory);
             existingProduct.setPrice(productDTO.getPrice());
             existingProduct.setDescription(productDTO.getDescription());
-//            existingProduct.setThumbnail(productDTO.getThumbnail());
+
             return productRepository.save(existingProduct);
         }
         return null;
@@ -119,7 +117,7 @@ public class ProductService implements IProductService{
                 .product(existingProduct)
                 .imageUrl(productImageDTO.getImageUrl())
                 .build();
-        //Ko cho insert quá 5 ảnh cho 1 sản phẩm
+
         int size = productImageRepository.findByProductId(productId).size();
         if(size >= ProductImage.MAXIMUM_IMAGES_PER_PRODUCT) {
             throw new InvalidParamException(
